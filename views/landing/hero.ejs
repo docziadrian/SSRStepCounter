@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="../../src/css/output.css" />
 </head>
 <section
-  class="relative w-full min-h-screen flex items-center justify-center overflow-hidden"
+  class="relative w-full min-h-screen flex items-center justify-center overflow-hidden -mt-32"
 >
   <!-- BG image -->
   <div class="absolute inset-0 z-0">
@@ -20,7 +20,7 @@
 
   <!-- container-->
   <div
-    class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+    class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16 2xl:mt-12"
   >
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
       <!-- Left szoveg dobozok -->
@@ -128,8 +128,8 @@
         <!-- Mobil nezeten a regisztralo gomb -->
         <div class="lg:hidden">
           <a
-            href="#"
-            class="btn-primary inline-block text-center font-semibold py-4 px-8 rounded-lg text-[#222831] uppercase tracking-wider shadow-lg"
+            href="/users/registration"
+            class="btn-primary inline-block text-center font-semibold py-4 px-8 rounded-lg text-[#222831] uppercase tracking-wider shadow-lg hover:cursor-pointer"
           >
             Regisztrálok Most
           </a>
@@ -145,7 +145,7 @@
           <img
             src="../src/images/fooldalNo.png"
             alt="Nő"
-            class="image-float w-full h-auto drop-shadow-2xl relative z-10 hidden lg:block scale-150"
+            class="image-float w-full h-auto drop-shadow-2xl relative hidden lg:block scale-150 z-20"
             onerror="this.style.display='none'"
           />
           <!-- cta - mobilon nincs, csak lg merettol -->
@@ -167,8 +167,8 @@
               </p>
 
               <a
-                href="#"
-                class="btn-primary block text-center font-semibold py-3 px-6 rounded-lg text-[#222831] uppercase tracking-wider shadow-lg"
+                href="/users/registration"
+                class="btn-primary block text-center font-semibold py-3 px-6 rounded-lg text-[#222831] uppercase tracking-wider shadow-lg hover:cursor-pointer"
               >
                 Regisztrálok
               </a>

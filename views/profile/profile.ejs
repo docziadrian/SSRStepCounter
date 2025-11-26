@@ -1,0 +1,173 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StepSetGo - Profilom</title>
+  <link rel="stylesheet" href="../../src/css/landing.css" />
+  <link rel="stylesheet" href="../../src/css/output.css" />
+</head>
+
+<%- include('../navbar/navbar') %>
+
+<section
+  class="relative -mt-16 w-full min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 px-4 sm:px-6 lg:px-8 bg-[#31363F]"
+>
+  <!-- BG image -->
+  <div class="absolute inset-0 z-0">
+    <img
+      src="../src/images/hatter.png"
+      alt="Background"
+      class="w-full h-full object-cover max-w-screen-2xl"
+    />
+    <div class="absolute inset-0 hero-gradient bg-pattern"></div>
+  </div>
+
+  <div
+    class="relative left-8 z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-6 lg:gap-8"
+  >
+    <!-- Profile Section -->
+    <div class="w-full lg:w-auto flex-1 space-y-4">
+      <!-- Adatok Módosítása Card -->
+      <div
+        class="bg-white/90 backdrop-blur-md rounded-xl shadow-xl p-4 sm:p-6 border border-[#76ABAE]/20"
+      >
+        <h3 class="text-lg font-bold text-[#222831] mb-3">Adatok módosítása</h3>
+
+        <form action="/users/profile/update" method="POST" class="space-y-3">
+          <div>
+            <label
+              for="name"
+              class="block text-xs font-semibold text-[#222831] mb-1.5"
+            >
+              Teljes név
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value="<%= userData.fullname %>"
+              required
+              class="w-full px-3 py-2.5 text-sm bg-white border-2 border-[#76ABAE]/30 rounded-lg text-[#222831] placeholder-[#31363F]/40 focus:outline-none focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent transition-all"
+            />
+          </div>
+
+          <div>
+            <label
+              for="email"
+              class="block text-xs font-semibold text-[#222831] mb-1.5"
+            >
+              Email cím
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value="<%= userData.email %>"
+              required
+              class="w-full px-3 py-2.5 text-sm bg-white border-2 border-[#76ABAE]/30 rounded-lg text-[#222831] placeholder-[#31363F]/40 focus:outline-none focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent transition-all"
+            />
+          </div>
+
+          <% if (typeof error !== 'undefined' && error) { %>
+          <div
+            class="bg-red-50 border-2 border-red-300 text-red-700 px-3 py-2 rounded-lg text-xs"
+          >
+            <%= error %>
+          </div>
+          <% } %> <% if (typeof success !== 'undefined' && success) { %>
+          <div
+            class="bg-green-50 border-2 border-green-300 text-green-700 px-3 py-2 rounded-lg text-xs"
+          >
+            <%= success %>
+          </div>
+          <% } %>
+
+          <button
+            type="submit"
+            class="w-full bg-[#76ABAE] hover:bg-[#76ABAE]/90 text-white text-sm font-bold py-2.5 rounded-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#76ABAE]/50 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+          >
+            Adatok mentése
+          </button>
+        </form>
+      </div>
+
+      <!-- Jelszó Módosítása Card -->
+      <div
+        class="bg-white/90 backdrop-blur-md rounded-xl shadow-xl p-4 sm:p-6 border border-[#76ABAE]/20"
+      >
+        <h3 class="text-lg font-bold text-[#222831] mb-3">Jelszó módosítása</h3>
+
+        <form action="/users/profile/password" method="POST" class="space-y-3">
+          <div>
+            <label
+              for="currentPassword"
+              class="block text-xs font-semibold text-[#222831] mb-1.5"
+            >
+              Jelenlegi jelszó
+            </label>
+            <input
+              type="password"
+              id="currentPassword"
+              name="currentPassword"
+              required
+              placeholder="Jelenlegi jelszó"
+              class="w-full px-3 py-2.5 text-sm bg-white border-2 border-[#76ABAE]/30 rounded-lg text-[#222831] placeholder-[#31363F]/40 focus:outline-none focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent transition-all"
+            />
+          </div>
+
+          <div>
+            <label
+              for="newPassword"
+              class="block text-xs font-semibold text-[#222831] mb-1.5"
+            >
+              Új jelszó
+            </label>
+            <input
+              type="password"
+              id="newPassword"
+              name="newPassword"
+              required
+              placeholder="Min. 6 karakter, betű és szám"
+              class="w-full px-3 py-2.5 text-sm bg-white border-2 border-[#76ABAE]/30 rounded-lg text-[#222831] placeholder-[#31363F]/40 focus:outline-none focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent transition-all"
+            />
+          </div>
+
+          <div>
+            <label
+              for="confirmPassword"
+              class="block text-xs font-semibold text-[#222831] mb-1.5"
+            >
+              Új jelszó megerősítése
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              required
+              placeholder="Írd be újra"
+              class="w-full px-3 py-2.5 text-sm bg-white border-2 border-[#76ABAE]/30 rounded-lg text-[#222831] placeholder-[#31363F]/40 focus:outline-none focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent transition-all"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-[#76ABAE] hover:bg-[#76ABAE]/90 text-white text-sm font-bold py-2.5 rounded-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#76ABAE]/50 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+          >
+            Jelszó módosítása
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right side: Image and Password Change -->
+    <div class="w-full lg:w-auto lg:max-w-2xl flex-shrink-0 space-y-4">
+      <!-- Motivational Image -->
+      <div class="hidden lg:block">
+        <img
+          src="../../src/images/erosizmosneninobg.png"
+          class="w-full h-auto drop-shadow-2xl scale-125"
+          alt="Motivációs kép"
+        />
+      </div>
+    </div>
+  </div>
+</section>

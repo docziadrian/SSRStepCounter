@@ -55,6 +55,7 @@ body {
   src: url("../src/fonts/wicked.ttf");
 }
 
-#wicked {
-  font-family: "wicked";
+#navbar {
+  z-index: 1000;
+  backdrop-filter: blur(10px);
 }

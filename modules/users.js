@@ -6,6 +6,13 @@ const bcrypt = require("bcrypt");
 
 const passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
 
+const {
+  guestNavbarItemsRight,
+  guestNavbarItemsLeft,
+  userNavbarItemsRight,
+  userNavbarItemsLeft,
+} = require("../modules/clientRendering/navbar");
+
 // Bcryptes titkositas
 function hashPassword(password) {
   const saltRounds = 10;
@@ -34,10 +41,19 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/registration", (req, res) => {
+  const isLoggedIn = !!req.session.userid;
+
   //Renderelje be a registration.ejs fájlt
   ejs.renderFile(
-    "views/registration.ejs",
-    { error: req.session.message || null, user: req.session.username || null },
+    "views/auth/registration.ejs",
+    {
+      error: req.session.message || null,
+      user: req.session.username || null,
+      navbarItemsLeft: isLoggedIn ? userNavbarItemsLeft : guestNavbarItemsLeft,
+      navbarItemsRight: isLoggedIn
+        ? userNavbarItemsRight
+        : guestNavbarItemsRight,
+    },
     (err, html) => {
       if (err) {
         console.error("Sablon renderelési hiba: ", err);
@@ -51,10 +67,19 @@ router.get("/registration", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
+  const isLoggedIn = !!req.session.userid;
+
   //Renderelje be a login.ejs fájlt
   ejs.renderFile(
-    "views/login.ejs",
-    { error: req.session.message || null, user: req.session.username || null },
+    "views/auth/login.ejs",
+    {
+      error: req.session.message || null,
+      user: req.session.username || null,
+      navbarItemsLeft: isLoggedIn ? userNavbarItemsLeft : guestNavbarItemsLeft,
+      navbarItemsRight: isLoggedIn
+        ? userNavbarItemsRight
+        : guestNavbarItemsRight,
+    },
     (err, html) => {
       if (err) {
         console.error("Sablon renderelési hiba: ", err);
@@ -108,12 +133,12 @@ router.post("/login", (req, res) => {
 
 router.post("/registration", (req, res) => {
   clearSessionMessages(req, res, () => {});
-  const { username, email, password, passwordAgain } = req.body;
+  const { fullname, email, password, passwordAgain } = req.body;
 
-  if (!username || !email || !password) {
+  if (!fullname || !email || !password) {
     req.session.message = "Kérlek, tölts ki minden mezőt.";
     req.session.severity = "error";
-    return res.redirect("/users/registration");
+    return res.redirect("/users/login");
   }
 
   if (password !== passwordAgain) {
@@ -149,8 +174,8 @@ router.post("/registration", (req, res) => {
     const hashedPassword = hashPassword(password);
 
     const insertQuery =
-      "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-    db.query(insertQuery, [username, email, hashedPassword], function (err) {
+      "INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)";
+    db.query(insertQuery, [fullname, email, hashedPassword], function (err) {
       if (err) {
         console.error("Adatbázis hiba: ", err);
         req.session.message = "Hiba történt a regisztráció során.";
@@ -174,7 +199,7 @@ router.post("/registration", (req, res) => {
           req.session.message = "Sikeres regisztráció!";
           req.session.severity = "success";
           req.session.userid = user.id;
-          req.session.username = user.name;
+          req.session.fullname = user.fullname;
           req.session.useremail = user.email;
           res.redirect("/");
         }
@@ -191,7 +216,9 @@ router.get("/profile", (req, res) => {
     return res.redirect("/users/login");
   }
 
-  const query = "SELECT id, name, email FROM users WHERE id = ?";
+  const isLoggedIn = !!req.session.userid;
+
+  const query = "SELECT id, fullname, email FROM users WHERE id = ?";
   db.query(query, [req.session.userid], function (err, results) {
     if (err || results.length === 0) {
       console.error("Adatbázis hiba: ", err);
@@ -202,12 +229,18 @@ router.get("/profile", (req, res) => {
     const userData = results[0];
 
     ejs.renderFile(
-      "views/profile.ejs",
+      "views/profile/profile.ejs",
       {
-        user: req.session.username || null,
+        user: req.session.fullname || null,
         userData: userData,
         error: req.session.message || null,
         success: req.session.success || null,
+        navbarItemsLeft: isLoggedIn
+          ? userNavbarItemsLeft
+          : guestNavbarItemsLeft,
+        navbarItemsRight: isLoggedIn
+          ? userNavbarItemsRight
+          : guestNavbarItemsRight,
       },
       (err, html) => {
         if (err) {
@@ -237,7 +270,7 @@ router.post("/profile/update", (req, res) => {
 
   // Frissítő függvény
   const updateUserData = () => {
-    const query = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+    const query = "UPDATE users SET fullname = ?, email = ? WHERE id = ?";
     db.query(query, [name, email, req.session.userid], function (err) {
       if (err) {
         console.error("Adatbázis hiba: ", err);

@@ -25,6 +25,9 @@ app.use("/", core);
 const users = require("./modules/users");
 app.use("/users", users);
 
+const stepcounter = require("./modules/stepcounter");
+app.use("/stepcounter", stepcounter);
+
 // Listening...
 app.listen(port, () => {
   console.log(`A szerver ezen a porton fut: ${port}`);
