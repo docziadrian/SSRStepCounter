@@ -1,0 +1,195 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StepSetGo - Lépj egy egészségesebb élet felé!</title>
+  <link rel="stylesheet" href="../../src/css/landing.css" />
+  <link rel="stylesheet" href="../../src/css/output.css" />
+</head>
+<section
+  class="relative w-full min-h-screen flex items-center justify-center overflow-hidden"
+>
+  <!-- BG image -->
+  <div class="absolute inset-0 z-0">
+    <img
+      src="../src/images/hatter.png"
+      alt="Background"
+      class="w-full h-full max-w-screen-2xl object-cover"
+    />
+    <div class="absolute inset-0 hero-gradient bg-pattern"></div>
+  </div>
+
+  <!-- container-->
+  <div
+    class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <!-- Left szoveg dobozok -->
+      <div class="text-white fade-in order-2 lg:order-1">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6">
+          Lépj egy
+          <span class="text-[white] p-2">egészségesebb</span>
+          élet felé!
+        </h1>
+
+        <p
+          class="text-base sm:text-lg lg:text-xl text-[#EEEEEE] leading-relaxed mb-8 max-w-xl"
+        >
+          Kövesd a napi lépéseidet, motiváld magad, és építs új szokásokat.
+          Csatlakozz közösségünkhöz és érj el nagyszerű célokat!
+        </p>
+
+        <!-- Par kiemelt dolgok -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-8 h-8 rounded-full bg-[#76abae] flex items-center justify-center flex-shrink-0"
+            >
+              <svg
+                class="w-5 h-5 text-[#222831]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </div>
+            <span class="text-gray-200">Lépésszámláló</span>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-8 h-8 rounded-full bg-[#76abae] flex items-center justify-center flex-shrink-0"
+            >
+              <svg
+                class="w-5 h-5 text-[#222831]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </div>
+            <span class="text-gray-200">Jutalmak</span>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-8 h-8 rounded-full bg-[#76abae] flex items-center justify-center flex-shrink-0"
+            >
+              <svg
+                class="w-5 h-5 text-[#222831]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </div>
+            <span class="text-gray-200">Közösség</span>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-8 h-8 rounded-full bg-[#76abae] flex items-center justify-center flex-shrink-0"
+            >
+              <svg
+                class="w-5 h-5 text-[#222831]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </div>
+            <span class="text-gray-200">Motiváció</span>
+          </div>
+        </div>
+
+        <!-- Mobil nezeten a regisztralo gomb -->
+        <div class="lg:hidden">
+          <a
+            href="#"
+            class="btn-primary inline-block text-center font-semibold py-4 px-8 rounded-lg text-[#222831] uppercase tracking-wider shadow-lg"
+          >
+            Regisztrálok Most
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: Kep + szoveg -->
+      <div
+        class="relative fade-in order-2 lg:order-2 flex justify-center lg:justify-end left-40"
+      >
+        <div class="relative w-full max-w-md lg:max-w-lg xl:max-w-2xl">
+          <!-- Női kep-->
+          <img
+            src="../src/images/fooldalNo.png"
+            alt="Nő"
+            class="image-float w-full h-auto drop-shadow-2xl relative z-10 hidden lg:block scale-150"
+            onerror="this.style.display='none'"
+          />
+          <!-- cta - mobilon nincs, csak lg merettol -->
+          <div
+            class="hidden lg:block absolute -left-24 xl:-left-32 top-1/2 -translate-y-1/2 w-72 xl:w-96 cta-card hover-lift rounded-lg p-6 xl:p-8"
+          >
+            <div class="border-l-4 border-[#76abae] pl-6">
+              <h2
+                class="text-2xl xl:text-3xl font-bold text-white mb-4 tracking-tight"
+              >
+                Csatlakozz Most!
+              </h2>
+
+              <p
+                class="text-sm xl:text-base text-gray-300 leading-relaxed mb-6"
+              >
+                Regisztrálj, kövesd a lépéseidet, szerezz jutalmakat és motiválj
+                másokat a céljaik elérésében.
+              </p>
+
+              <a
+                href="#"
+                class="btn-primary block text-center font-semibold py-3 px-6 rounded-lg text-[#222831] uppercase tracking-wider shadow-lg"
+              >
+                Regisztrálok
+              </a>
+
+              <!-- Stats -->
+              <div
+                class="mt-6 pt-6 border-t border-gray-600 grid grid-cols-2 gap-4"
+              >
+                <div>
+                  <div class="text-2xl font-bold text-[#76abae]">10k+</div>
+                  <div class="text-xs text-gray-400 uppercase">Felhasználó</div>
+                </div>
+                <div>
+                  <div class="text-2xl font-bold text-[#76abae]">5M+</div>
+                  <div class="text-xs text-gray-400 uppercase">Lépés</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
