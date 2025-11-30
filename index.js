@@ -9,6 +9,7 @@ const session = require("express-session");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/src", express.static("src"));
+app.use("/pictures", express.static("pictures"));
 app.use(
   session({
     secret: "gfg-key",
@@ -27,6 +28,12 @@ app.use("/users", users);
 
 const stepcounter = require("./modules/stepcounter");
 app.use("/stepcounter", stepcounter);
+
+const workoutPlans = require("./modules/workoutPlans");
+app.use("/plans", workoutPlans);
+
+const products = require("./modules/products");
+app.use("/products", products);
 
 // Listening...
 app.listen(port, () => {

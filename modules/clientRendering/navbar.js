@@ -6,13 +6,15 @@ const guestNavbarItemsRight = [
 const guestNavbarItemsLeft = [];
 
 const userNavbarItemsRight = [
+  { name: "Kosár", link: "/cart", type: "cart" },
   { name: "Profil", link: "/users/profile" },
   { name: "Kijelentkezés", link: "/users/logout" },
 ];
 
 const userNavbarItemsLeft = [
   { name: "Lépésszámláló", link: "/stepcounter/view" },
-  { name: "Edzésterveink", link: "/plans" },
+  { name: "Edzésterv", link: "/plans/view" },
+  { name: "Termékeink", link: "/products/view" },
 ];
 
 module.exports = {

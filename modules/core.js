@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ejs = require("ejs");
 const db = require("./db");
+const fs = require("fs");
 
 const {
   guestNavbarItemsRight,
@@ -33,6 +34,21 @@ router.get("/", (req, res) => {
       }
     }
   );
+});
+
+
+router.get("/getPicture/:picture", (req, res) => {
+  const picture = req.params.picture;
+  console.log(picture);
+  const picturePath = `./pictures/${picture}`;
+  fs.readFile(picturePath, (err, data) => {
+    if (err) {
+      res.status(404).send("Nem található a kép.");
+    } else {
+      res.setHeader("Content-Type", "image/jpeg");
+      res.send(data);
+    }
+  });
 });
 
 module.exports = router;

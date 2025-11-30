@@ -1,0 +1,1146 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StepSetGo - Termékek</title>
+  <link rel="stylesheet" href="../../src/css/landing.css" />
+  <link rel="stylesheet" href="../../src/css/output.css" />
+  <style>
+    .glass-card {
+      background: rgba(59, 85, 122, 0.212);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(118, 171, 174, 0.2);
+    }
+    .glass-card-light {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .glass-modal {
+      background: rgba(34, 40, 49, 0.95);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(118, 171, 174, 0.3);
+    }
+    .price-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #76abae;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+    .price-range::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #76abae;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+    .price-range {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(118, 171, 174, 0.3);
+      outline: none;
+    }
+    .star-filter:checked + label {
+      background: rgba(118, 171, 174, 0.4);
+      border-color: #76abae;
+    }
+    .filter-dropdown {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    .filter-dropdown.open {
+      max-height: 800px;
+      opacity: 1;
+    }
+    .product-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    .modal-overlay {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.active .modal-content {
+      transform: scale(1) translateY(0);
+    }
+    .thumbnail-item {
+      transition: all 0.2s ease;
+      opacity: 0.6;
+    }
+    .thumbnail-item:hover,
+    .thumbnail-item.active {
+      opacity: 1;
+      border-color: #76abae;
+    }
+    .carousel-image {
+      transition: opacity 0.3s ease;
+    }
+  </style>
+</head>
+
+<%- include('../navbar/navbar') %>
+
+<section class="fixed inset-0 w-full h-full -z-10 bg-[#31363F]">
+  <div class="absolute inset-0">
+    <img
+      src="../src/images/hatter.png"
+      alt="Background"
+      class="w-full h-full object-cover hidden xl:block"
+    />
+    <img
+      src="../src/images/hattermobile.png"
+      alt="Background"
+      class="w-full h-full object-cover xl:hidden"
+    />
+    <div class="absolute inset-0 hero-gradient bg-pattern"></div>
+    <div class="absolute inset-0"></div>
+  </div>
+</section>
+
+<div
+  class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 pt-32"
+  id="productModal"
+  onclick="closeModalOnOverlay(event)"
+>
+  <div class="absolute inset-0 bg-black/70"></div>
+  <div
+    class="modal-content glass-modal rounded-3xl w-full max-w-4xl max-h-[80vh] overflow-x-hidden relative"
+  >
+    <button
+      onclick="closeModal()"
+      class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all"
+    >
+      <svg
+        class="w-6 h-6 text-white"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        ></path>
+      </svg>
+    </button>
+
+    <div class="overflow-y-auto max-h-[90vh] p-6 sm:p-8">
+      <h2
+        class="text-2xl sm:text-3xl font-bold text-white mb-6 pr-12"
+        id="modalTitle"
+      ></h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+        <div>
+          <div class="relative rounded-2xl overflow-hidden mb-4 bg-black/20">
+            <div class="aspect-square relative" id="carouselContainer">
+              <img
+                id="mainCarouselImage"
+                src=""
+                alt=""
+                class="carousel-image w-full h-full object-cover"
+              />
+              <button
+                onclick="prevImage()"
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-all"
+              >
+                <svg
+                  class="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                onclick="nextImage()"
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-all"
+              >
+                <svg
+                  class="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </button>
+              <div
+                class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2"
+                id="carouselDots"
+              ></div>
+            </div>
+          </div>
+
+          <div
+            class="flex gap-2 overflow-x-auto pb-2"
+            id="thumbnailContainer"
+          ></div>
+        </div>
+
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2 mb-4">
+            <span
+              class="px-3 py-1 rounded-full text-sm font-semibold bg-[#76ABAE] text-white"
+              id="modalCategory"
+            ></span>
+            <div class="flex items-center gap-1" id="modalRating"></div>
+          </div>
+
+          <p
+            class="text-3xl sm:text-4xl font-bold text-[#76ABAE] mb-6"
+            id="modalPrice"
+          ></p>
+
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold text-white mb-3">
+              Termék leírása
+            </h3>
+            <p
+              class="text-[#EEEEEE]/80 text-sm leading-relaxed"
+              id="modalDescription"
+            ></p>
+          </div>
+
+          <div class="glass-card-light rounded-xl p-4 mb-6">
+            <h3 class="text-lg font-semibold text-white mb-3">
+              Termék részletei
+            </h3>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-[#EEEEEE]/60">Kategória</span>
+                <span class="text-white font-medium" id="detailCategory"></span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-[#EEEEEE]/60">Értékelés</span>
+                <span class="text-white font-medium" id="detailRating"></span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-[#EEEEEE]/60">Ár</span>
+                <span
+                  class="text-[#76ABAE] font-medium"
+                  id="detailPrice"
+                ></span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-[#EEEEEE]/60">Elérhetőség</span>
+                <span class="text-green-400 font-medium">Raktáron</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-[#EEEEEE]/60">Szállítás</span>
+                <span class="text-white font-medium">1-3 munkanap</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-auto">
+            <button
+              onclick="addToCartFromModal()"
+              class="w-full py-4 rounded-xl bg-[#76ABAE] hover:bg-[#76ABAE]/90 text-white text-lg font-bold transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
+              id="modalAddToCart"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                ></path>
+              </svg>
+              Kosárba teszem
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="relative min-h-screen pt-12 pb-32 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3">
+        Termékeink
+      </h1>
+      <p class="text-[#EEEEEE]/70 text-sm sm:text-base max-w-2xl mx-auto">
+        Fedezd fel prémium fitness kiegészítőinket és okoseszközeinket
+      </p>
+    </div>
+
+    <button
+      onclick="toggleMobileFilter()"
+      class="lg:hidden w-full mb-4 glass-card-light rounded-xl px-4 py-3 flex items-center justify-center gap-2 text-white font-semibold"
+    >
+      <svg
+        class="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+        ></path>
+      </svg>
+      Szűrők
+      <svg
+        class="w-4 h-4 transition-transform duration-300"
+        id="filterArrow"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 9l-7 7-7-7"
+        ></path>
+      </svg>
+    </button>
+
+    <div class="filter-dropdown lg:hidden mb-4" id="mobileFilterDropdown">
+      <div class="glass-card rounded-2xl p-5">
+        <h3 class="text-white font-bold text-lg mb-4 flex items-center gap-2">
+          <svg
+            class="w-5 h-5 text-[#76ABAE]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          Ár szűrő
+        </h3>
+        <div class="space-y-4 mb-6">
+          <div>
+            <label class="text-[#EEEEEE]/70 text-xs mb-2 block"
+              >Minimum ár</label
+            >
+            <input
+              type="range"
+              class="price-range"
+              id="priceMinMobile"
+              min="<%= minPrice %>"
+              max="<%= maxPrice %>"
+              value="<%= minPrice %>"
+              oninput="updatePriceFilterMobile()"
+            />
+          </div>
+          <div>
+            <label class="text-[#EEEEEE]/70 text-xs mb-2 block"
+              >Maximum ár</label
+            >
+            <input
+              type="range"
+              class="price-range"
+              id="priceMaxMobile"
+              min="<%= minPrice %>"
+              max="<%= maxPrice %>"
+              value="<%= maxPrice %>"
+              oninput="updatePriceFilterMobile()"
+            />
+          </div>
+          <div class="flex justify-between items-center text-sm">
+            <span class="text-[#76ABAE] font-semibold" id="priceMinValueMobile"
+              ><%= minPrice.toLocaleString('hu-HU') %> Ft</span
+            >
+            <span class="text-[#EEEEEE]/50">-</span>
+            <span class="text-[#76ABAE] font-semibold" id="priceMaxValueMobile"
+              ><%= maxPrice.toLocaleString('hu-HU') %> Ft</span
+            >
+          </div>
+        </div>
+
+        <h3 class="text-white font-bold text-lg mb-4 flex items-center gap-2">
+          <svg
+            class="w-5 h-5 text-[#76ABAE]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+            ></path>
+          </svg>
+          Értékelés szűrő
+        </h3>
+        <div class="space-y-2">
+          <% for (let i = 5; i >= 1; i--) { %>
+          <div class="flex items-center">
+            <input
+              type="radio"
+              name="ratingMobile"
+              id="rating<%= i %>Mobile"
+              value="<%= i %>"
+              class="star-filter hidden"
+              onchange="filterProducts()"
+            />
+            <label
+              for="rating<%= i %>Mobile"
+              class="flex items-center gap-2 w-full px-3 py-2 rounded-lg cursor-pointer border border-transparent hover:border-[#76ABAE]/30 transition-all"
+            >
+              <div class="flex">
+                <% for (let j = 1; j <= 5; j++) { %>
+                <svg
+                  class="w-4 h-4 <%= j <= i ? 'text-yellow-400' : 'text-gray-500' %>"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                  ></path>
+                </svg>
+                <% } %>
+              </div>
+              <span class="text-[#EEEEEE]/70 text-sm"
+                ><%= i === 5 ? '5 csillag' : i + ' csillag és felette' %></span
+              >
+            </label>
+          </div>
+          <% } %>
+          <div class="flex items-center">
+            <input
+              type="radio"
+              name="ratingMobile"
+              id="ratingAllMobile"
+              value="0"
+              class="star-filter hidden"
+              checked
+              onchange="filterProducts()"
+            />
+            <label
+              for="ratingAllMobile"
+              class="flex items-center gap-2 w-full px-3 py-2 rounded-lg cursor-pointer border border-transparent hover:border-[#76ABAE]/30 transition-all"
+            >
+              <span class="text-[#EEEEEE]/70 text-sm">Összes értékelés</span>
+            </label>
+          </div>
+        </div>
+
+        <button
+          onclick="resetFilters()"
+          class="w-full mt-4 py-2 rounded-lg border border-[#76ABAE]/30 text-[#76ABAE] text-sm font-medium hover:bg-[#76ABAE]/10 transition-all"
+        >
+          Szűrők törlése
+        </button>
+      </div>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-6 2xl:-ml-32">
+      <aside class="hidden lg:block w-72 flex-shrink-0">
+        <div class="glass-card rounded-2xl p-5 sticky top-28">
+          <h3 class="text-white font-bold text-lg mb-4 flex items-center gap-2">
+            <svg
+              class="w-5 h-5 text-[#76ABAE]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            Ár szűrő
+          </h3>
+          <div class="space-y-4 mb-6">
+            <div>
+              <label class="text-[#EEEEEE]/70 text-xs mb-2 block"
+                >Minimum ár</label
+              >
+              <input
+                type="range"
+                class="price-range"
+                id="priceMin"
+                min="<%= minPrice %>"
+                max="<%= maxPrice %>"
+                value="<%= minPrice %>"
+                oninput="updatePriceFilter()"
+              />
+            </div>
+            <div>
+              <label class="text-[#EEEEEE]/70 text-xs mb-2 block"
+                >Maximum ár</label
+              >
+              <input
+                type="range"
+                class="price-range"
+                id="priceMax"
+                min="<%= minPrice %>"
+                max="<%= maxPrice %>"
+                value="<%= maxPrice %>"
+                oninput="updatePriceFilter()"
+              />
+            </div>
+            <div class="flex justify-between items-center text-sm">
+              <span class="text-[#76ABAE] font-semibold" id="priceMinValue"
+                ><%= minPrice.toLocaleString('hu-HU') %> Ft</span
+              >
+              <span class="text-[#EEEEEE]/50">-</span>
+              <span class="text-[#76ABAE] font-semibold" id="priceMaxValue"
+                ><%= maxPrice.toLocaleString('hu-HU') %> Ft</span
+              >
+            </div>
+          </div>
+
+          <div class="border-t border-[#76ABAE]/20 pt-5">
+            <h3
+              class="text-white font-bold text-lg mb-4 flex items-center gap-2"
+            >
+              <svg
+                class="w-5 h-5 text-[#76ABAE]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                ></path>
+              </svg>
+              Értékelés szűrő
+            </h3>
+            <div class="space-y-2">
+              <% for (let i = 5; i >= 1; i--) { %>
+              <div class="flex items-center">
+                <input
+                  type="radio"
+                  name="rating"
+                  id="rating<%= i %>"
+                  value="<%= i %>"
+                  class="star-filter hidden"
+                  onchange="filterProducts()"
+                />
+                <label
+                  for="rating<%= i %>"
+                  class="flex items-center gap-2 w-full px-3 py-2 rounded-lg cursor-pointer border border-transparent hover:border-[#76ABAE]/30 transition-all"
+                >
+                  <div class="flex">
+                    <% for (let j = 1; j <= 5; j++) { %>
+                    <svg
+                      class="w-4 h-4 <%= j <= i ? 'text-yellow-400' : 'text-white' %>"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                      ></path>
+                    </svg>
+                    <% } %>
+                  </div>
+                  <span class="text-[#EEEEEE]/70 text-sm"
+                    ><%= i === 5 ? '5 csillag' : i + ' csillag és felette'
+                    %></span
+                  >
+                </label>
+              </div>
+              <% } %>
+              <div class="flex items-center">
+                <input
+                  type="radio"
+                  name="rating"
+                  id="ratingAll"
+                  value="0"
+                  class="star-filter hidden"
+                  checked
+                  onchange="filterProducts()"
+                />
+                <label
+                  for="ratingAll"
+                  class="flex items-center gap-2 w-full px-3 py-2 rounded-lg cursor-pointer border border-transparent hover:border-[#76ABAE]/30 transition-all"
+                >
+                  <span class="text-[#EEEEEE]/70 text-sm"
+                    >Összes értékelés</span
+                  >
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onclick="resetFilters()"
+            class="w-full mt-5 py-2.5 rounded-lg border border-[#76ABAE]/30 text-[#76ABAE] text-sm font-medium hover:bg-[#76ABAE]/10 transition-all"
+          >
+            Szűrők törlése
+          </button>
+        </div>
+      </aside>
+
+      <div class="flex-1">
+        <div class="flex flex-col sm:flex-row gap-4 mb-6">
+          <div class="relative flex-1">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Termék keresése..."
+              oninput="filterProducts()"
+              class="w-full glass-card-light rounded-xl px-4 py-3 pl-11 text-white placeholder-[#EEEEEE]/50 text-sm focus:outline-none focus:ring-2 focus:ring-[#76ABAE]/50"
+            />
+            <svg
+              class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#EEEEEE]/50"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              ></path>
+            </svg>
+          </div>
+
+          <div class="relative">
+            <select
+              id="sortSelect"
+              onchange="filterProducts()"
+              class="glass-card-light rounded-xl px-4 py-3 pr-10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#76ABAE]/50 appearance-none cursor-pointer min-w-[180px]"
+            >
+              <option value="default" class="bg-[#222831]">Rendezés</option>
+              <option value="price-asc" class="bg-[#222831]">
+                Ár: alacsony - magas
+              </option>
+              <option value="price-desc" class="bg-[#222831]">
+                Ár: magas - alacsony
+              </option>
+              <option value="name-asc" class="bg-[#222831]">Név: A-Z</option>
+              <option value="rating-desc" class="bg-[#222831]">
+                Értékelés szerint
+              </option>
+            </select>
+            <svg
+              class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#EEEEEE]/50 pointer-events-none"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4 sm:p-6">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-[#EEEEEE]/70 text-sm">
+              <span id="productCount"><%= products.length %></span> termék
+              található
+            </p>
+          </div>
+
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+            id="productsGrid"
+          >
+            <% if (products && products.length > 0) { %> <%
+            products.forEach(function(product, index) { %>
+            <div
+              class="product-card glass-card-light rounded-xl overflow-hidden"
+              data-id="<%= product.id %>"
+              data-price="<%= product.price %>"
+              data-rating="<%= product.rating %>"
+              data-title="<%= product.title.toLowerCase() %>"
+              data-category="<%= product.category %>"
+              data-description="<%= product.description %>"
+              data-imageurls="<%= JSON.stringify(product.imageurls) %>"
+              onclick="openProductModal(this)"
+            >
+              <div class="relative h-64 overflow-hidden">
+                <img
+                  src="<%= product.imageurls && product.imageurls.length > 0 ? product.imageurls[0] : 'https://via.placeholder.com/400x300?text=Kép+nem+elérhető' %>"
+                  alt="<%= product.title %>"
+                  class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  onerror="this.src='https://via.placeholder.com/400x300?text=Kép+nem+elérhető'"
+                />
+                <div class="absolute top-3 right-3">
+                  <span
+                    class="px-2 py-1 rounded-full text-xs font-semibold bg-[#76ABAE] text-white"
+                  >
+                    <%= product.category %>
+                  </span>
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="text-white font-bold text-base mb-2 line-clamp-1">
+                  <%= product.title %>
+                </h3>
+                <p class="text-[#EEEEEE]/60 text-xs mb-3 line-clamp-2">
+                  <%= product.description %>
+                </p>
+                <div class="flex items-center gap-1 mb-3">
+                  <% for (let i = 1; i <= 5; i++) { %>
+                  <svg
+                    class="w-4 h-4 <%= i <= Math.round(product.rating) ? 'text-yellow-400' : 'text-gray-500' %>"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                    ></path>
+                  </svg>
+                  <% } %>
+                  <span class="text-[#EEEEEE]/50 text-xs ml-1"
+                    >(<%= product.rating %>)</span
+                  >
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[#76ABAE] font-bold text-lg">
+                    <%= product.price.toLocaleString('hu-HU') %> Ft
+                  </span>
+                  <button
+                    onclick="event.stopPropagation(); addToCart(<%= product.id %>)"
+                    class="p-2.5 rounded-lg bg-[#76ABAE] hover:bg-[#76ABAE]/80 transition-all group"
+                  >
+                    <svg
+                      class="w-5 h-5 text-white group-hover:scale-110 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <% }); %> <% } else { %>
+            <div class="col-span-full text-center py-12">
+              <svg
+                class="w-16 h-16 text-[#76ABAE]/50 mx-auto mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                ></path>
+              </svg>
+              <p class="text-[#EEEEEE]/70 text-lg">
+                Jelenleg nincsenek termékek
+              </p>
+            </div>
+            <% } %>
+          </div>
+
+          <div id="noResults" class="hidden col-span-full text-center py-12">
+            <svg
+              class="w-16 h-16 text-[#76ABAE]/50 mx-auto mb-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <p class="text-[#EEEEEE]/70 text-lg">Nincs találat a keresésre</p>
+            <button
+              onclick="resetFilters()"
+              class="mt-4 px-4 py-2 rounded-lg bg-[#76ABAE] text-white text-sm font-medium hover:bg-[#76ABAE]/80 transition-all"
+            >
+              Szűrők törlése
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../footer/footer') %>
+
+<script>
+  let currentProductId = null;
+  let currentImageIndex = 0;
+  let currentImages = [];
+
+  function openProductModal(element) {
+    const id = element.dataset.id;
+    const title = element.querySelector("h3").textContent.trim();
+    const price = parseInt(element.dataset.price);
+    const rating = parseFloat(element.dataset.rating);
+    const category = element.dataset.category;
+    const description = element.dataset.description;
+    let imageurls = [];
+
+    try {
+      imageurls = JSON.parse(element.dataset.imageurls);
+    } catch (e) {
+      imageurls = [];
+    }
+
+    currentProductId = id;
+    currentImages = imageurls;
+    currentImageIndex = 0;
+
+    document.getElementById("modalTitle").textContent = title;
+    document.getElementById("modalCategory").textContent = category;
+    document.getElementById("modalPrice").textContent =
+      price.toLocaleString("hu-HU") + " Ft";
+    document.getElementById("modalDescription").textContent = description;
+    document.getElementById("detailCategory").textContent = category;
+    document.getElementById("detailRating").textContent = rating + " / 5";
+    document.getElementById("detailPrice").textContent =
+      price.toLocaleString("hu-HU") + " Ft";
+
+    let ratingHtml = "";
+    for (let i = 1; i <= 5; i++) {
+      ratingHtml +=
+        '<svg class="w-5 h-5 ' +
+        (i <= Math.round(rating) ? "text-yellow-400" : "text-gray-500") +
+        '" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
+    }
+    ratingHtml +=
+      '<span class="text-[#EEEEEE]/50 text-sm ml-1">(' + rating + ")</span>";
+    document.getElementById("modalRating").innerHTML = ratingHtml;
+
+    updateCarousel();
+    updateThumbnails();
+
+    document.getElementById("productModal").classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    document.getElementById("productModal").classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  function closeModalOnOverlay(event) {
+    if (
+      event.target === document.getElementById("productModal") ||
+      event.target.classList.contains("bg-black/70")
+    ) {
+      closeModal();
+    }
+  }
+
+  function updateCarousel() {
+    const mainImage = document.getElementById("mainCarouselImage");
+    if (currentImages.length > 0) {
+      mainImage.src = currentImages[currentImageIndex];
+    } else {
+      mainImage.src =
+        "https://via.placeholder.com/800x800?text=Kép+nem+elérhető";
+    }
+
+    let dotsHtml = "";
+    for (let i = 0; i < currentImages.length; i++) {
+      dotsHtml +=
+        '<button onclick="goToImage(' +
+        i +
+        ')" class="w-2 h-2 rounded-full transition-all ' +
+        (i === currentImageIndex ? "bg-[#76ABAE] w-4" : "bg-white/50") +
+        '"></button>';
+    }
+    document.getElementById("carouselDots").innerHTML = dotsHtml;
+  }
+
+  function updateThumbnails() {
+    const container = document.getElementById("thumbnailContainer");
+    let html = "";
+    currentImages.forEach((url, index) => {
+      html +=
+        '<button onclick="goToImage(' +
+        index +
+        ')" class="thumbnail-item flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 ' +
+        (index === currentImageIndex
+          ? "active border-[#76ABAE]"
+          : "border-transparent") +
+        '"><img src="' +
+        url +
+        '" alt="Kép ' +
+        (index + 1) +
+        '" class="w-full h-full object-cover" onerror="this.src=\'https://via.placeholder.com/100x100?text=Kép\'"></button>';
+    });
+    container.innerHTML = html;
+  }
+
+  function goToImage(index) {
+    currentImageIndex = index;
+    updateCarousel();
+    updateThumbnails();
+  }
+
+  function nextImage() {
+    currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+    updateCarousel();
+    updateThumbnails();
+  }
+
+  function prevImage() {
+    currentImageIndex =
+      (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+    updateCarousel();
+    updateThumbnails();
+  }
+
+  function addToCartFromModal() {
+    if (currentProductId) {
+      addToCart(currentProductId);
+    }
+  }
+
+  function toggleMobileFilter() {
+    const dropdown = document.getElementById("mobileFilterDropdown");
+    const arrow = document.getElementById("filterArrow");
+    dropdown.classList.toggle("open");
+    arrow.style.transform = dropdown.classList.contains("open")
+      ? "rotate(180deg)"
+      : "rotate(0deg)";
+  }
+
+  function updatePriceFilter() {
+    const min = document.getElementById("priceMin");
+    const max = document.getElementById("priceMax");
+    const minValue = document.getElementById("priceMinValue");
+    const maxValue = document.getElementById("priceMaxValue");
+
+    if (parseInt(min.value) > parseInt(max.value)) {
+      min.value = max.value;
+    }
+
+    minValue.textContent = parseInt(min.value).toLocaleString("hu-HU") + " Ft";
+    maxValue.textContent = parseInt(max.value).toLocaleString("hu-HU") + " Ft";
+
+    filterProducts();
+  }
+
+  function updatePriceFilterMobile() {
+    const min = document.getElementById("priceMinMobile");
+    const max = document.getElementById("priceMaxMobile");
+    const minValue = document.getElementById("priceMinValueMobile");
+    const maxValue = document.getElementById("priceMaxValueMobile");
+
+    if (parseInt(min.value) > parseInt(max.value)) {
+      min.value = max.value;
+    }
+
+    minValue.textContent = parseInt(min.value).toLocaleString("hu-HU") + " Ft";
+    maxValue.textContent = parseInt(max.value).toLocaleString("hu-HU") + " Ft";
+
+    filterProducts();
+  }
+
+  function filterProducts() {
+    const searchValue = document
+      .getElementById("searchInput")
+      .value.toLowerCase();
+    const sortValue = document.getElementById("sortSelect").value;
+
+    const isLargeScreen = window.innerWidth >= 1024;
+    const priceMin = parseInt(
+      document.getElementById(isLargeScreen ? "priceMin" : "priceMinMobile")
+        ?.value || 0
+    );
+    const priceMax = parseInt(
+      document.getElementById(isLargeScreen ? "priceMax" : "priceMaxMobile")
+        ?.value || 999999999
+    );
+
+    const ratingInputs = document.querySelectorAll(
+      isLargeScreen ? 'input[name="rating"]' : 'input[name="ratingMobile"]'
+    );
+    let selectedRating = 0;
+    ratingInputs.forEach((input) => {
+      if (input.checked) selectedRating = parseInt(input.value);
+    });
+
+    const products = document.querySelectorAll(".product-card");
+    const productsArray = Array.from(products);
+
+    productsArray.forEach((product) => {
+      const price = parseInt(product.dataset.price);
+      const rating = parseFloat(product.dataset.rating);
+      const title = product.dataset.title;
+
+      const matchesSearch = title.includes(searchValue);
+      const matchesPrice = price >= priceMin && price <= priceMax;
+      const matchesRating = selectedRating === 0 || rating >= selectedRating;
+
+      if (matchesSearch && matchesPrice && matchesRating) {
+        product.style.display = "block";
+      } else {
+        product.style.display = "none";
+      }
+    });
+
+    if (sortValue !== "default") {
+      const grid = document.getElementById("productsGrid");
+      const sortedProducts = productsArray.sort((a, b) => {
+        if (sortValue === "price-asc") {
+          return parseInt(a.dataset.price) - parseInt(b.dataset.price);
+        } else if (sortValue === "price-desc") {
+          return parseInt(b.dataset.price) - parseInt(a.dataset.price);
+        } else if (sortValue === "name-asc") {
+          return a.dataset.title.localeCompare(b.dataset.title, "hu");
+        } else if (sortValue === "rating-desc") {
+          return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
+        }
+        return 0;
+      });
+
+      sortedProducts.forEach((product) => grid.appendChild(product));
+    }
+
+    const visibleCount = productsArray.filter(
+      (p) => p.style.display !== "none"
+    ).length;
+    document.getElementById("productCount").textContent = visibleCount;
+
+    const noResults = document.getElementById("noResults");
+    if (visibleCount === 0) {
+      noResults.classList.remove("hidden");
+    } else {
+      noResults.classList.add("hidden");
+    }
+  }
+
+  function resetFilters() {
+    document.getElementById("searchInput").value = "";
+    document.getElementById("sortSelect").value = "default";
+
+    const priceMin = document.getElementById("priceMin");
+    const priceMax = document.getElementById("priceMax");
+    const priceMinMobile = document.getElementById("priceMinMobile");
+    const priceMaxMobile = document.getElementById("priceMaxMobile");
+
+    if (priceMin) {
+      priceMin.value = priceMin.min;
+      priceMax.value = priceMax.max;
+      document.getElementById("priceMinValue").textContent =
+        parseInt(priceMin.min).toLocaleString("hu-HU") + " Ft";
+      document.getElementById("priceMaxValue").textContent =
+        parseInt(priceMax.max).toLocaleString("hu-HU") + " Ft";
+    }
+    if (priceMinMobile) {
+      priceMinMobile.value = priceMinMobile.min;
+      priceMaxMobile.value = priceMaxMobile.max;
+      document.getElementById("priceMinValueMobile").textContent =
+        parseInt(priceMinMobile.min).toLocaleString("hu-HU") + " Ft";
+      document.getElementById("priceMaxValueMobile").textContent =
+        parseInt(priceMaxMobile.max).toLocaleString("hu-HU") + " Ft";
+    }
+
+    document
+      .querySelectorAll('input[name="rating"], input[name="ratingMobile"]')
+      .forEach((input) => {
+        if (input.value === "0") input.checked = true;
+      });
+
+    filterProducts();
+  }
+
+  function addToCart(productId) {
+    const cartCounter = document.getElementById("cartCounter");
+    const cartCounterMobile = document.getElementById("cartCounterMobile");
+
+    if (cartCounter) {
+      cartCounter.textContent = parseInt(cartCounter.textContent) + 1;
+    }
+    if (cartCounterMobile) {
+      cartCounterMobile.textContent =
+        parseInt(cartCounterMobile.textContent) + 1;
+    }
+
+    const button = event.target.closest("button");
+    if (button) {
+      const originalHTML = button.innerHTML;
+      button.innerHTML =
+        '<svg class="w-5 h-5 text-white animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+      button.classList.add("bg-green-500");
+      button.classList.remove("bg-[#76ABAE]");
+
+      setTimeout(() => {
+        button.innerHTML = originalHTML;
+        button.classList.remove("bg-green-500");
+        button.classList.add("bg-[#76ABAE]");
+      }, 1000);
+    }
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (document.getElementById("productModal").classList.contains("active")) {
+      if (e.key === "Escape") closeModal();
+      if (e.key === "ArrowLeft") prevImage();
+      if (e.key === "ArrowRight") nextImage();
+    }
+  });
+
+  window.addEventListener("resize", filterProducts);
+</script>

@@ -19,6 +19,13 @@ body {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
+.cta-card-prodcs {
+  backdrop-filter: blur(2px);
+  background: rgba(36, 43, 56, 0.747);
+  border: 1px solid rgba(118, 171, 174, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
 .btn-primary {
   background: linear-gradient(135deg, #76abae 0%, #5a8a8d 100%);
   transition: all 0.3s ease;

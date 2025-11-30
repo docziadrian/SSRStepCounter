@@ -9,14 +9,24 @@
 <%- include('../navbar/navbar') %>
 
 <section
-  class="relative -mt-16 w-full min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 px-4 sm:px-6 lg:px-8 bg-[#31363F]"
+  class="relative -mt-24 w-full min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 px-4 sm:px-6 lg:px-8 bg-[#31363F]"
 >
   <!-- BG image -->
   <div class="absolute inset-0 z-0">
     <img
       src="../src/images/hatter.png"
       alt="Background"
-      class="w-full h-full object-cover max-w-screen-2xl"
+      class="w-full h-full xl:max-w-[70%] object-cover"
+    />
+    <div class="absolute inset-0 hero-gradient bg-pattern"></div>
+  </div>
+
+  <!-- Mobile BG image -->
+  <div class="absolute inset-0 z-0 xl:hidden">
+    <img
+      src="../src/images/hattermobile.png"
+      alt="Background"
+      class="w-full h-full xl:max-w-[70%] object-cover"
     />
     <div class="absolute inset-0 hero-gradient bg-pattern"></div>
   </div>

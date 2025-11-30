@@ -9,26 +9,37 @@
 <%- include('../navbar/navbar') %>
 
 <section
-  class="relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 px-4 sm:px-6 lg:px-8 bg-[#31363F] -mt-32"
+  class="relative w-full min-h-screen bg-[#31363F] lg:min-h-[calc(71vh*1.3)] xl:min-h-[calc(81vh*1.3)] flex items-center justify-center overflow-hidden -top-32"
 >
+  <!-- BG image -->
   <div class="absolute inset-0 z-0">
     <img
       src="../src/images/hatter.png"
       alt="Background"
-      class="w-full h-full object-cover max-w-screen-2xl"
+      class="w-full h-full xl:max-w-[70%] object-cover"
     />
     <div class="absolute inset-0 hero-gradient bg-pattern"></div>
   </div>
 
-  <div class="relative z-10 w-full max-w-7xl mx-auto mt-32">
+  <!-- Mobile BG image -->
+  <div class="absolute inset-0 z-0 xl:hidden">
+    <img
+      src="../src/images/hattermobile.png"
+      alt="Background"
+      class="w-full h-full xl:max-w-[70%] object-cover"
+    />
+    <div class="absolute inset-0 hero-gradient bg-pattern"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-7xl mx-auto top-40">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-4">
       <div
-        class="bg-white/90 backdrop-blur-md rounded-xl shadow-xl p-4 sm:p-6 border border-[#76ABAE]/20"
+        class="bg-[#222831]/60 backdrop-blur-md rounded-xl shadow-xl p-4 sm:p-6 border border-[#76ABAE]/20"
       >
-        <h2 class="text-xl sm:text-2xl font-bold mb-1 text-[#222831]">
+        <h2 class="text-xl sm:text-2xl font-bold mb-1 text-[white]">
           Lépésszámláló
         </h2>
-        <p class="text-xs text-[#31363F]/70 mb-4">
+        <p class="text-xs text-[white] mb-4">
           Kövesd nyomon napi lépéseidet és érj el új célokat
         </p>
 
@@ -39,7 +50,7 @@
             >
               <span class="text-3xl font-bold text-white">0</span>
             </div>
-            <p class="text-xs font-medium text-[#31363F]/70">Mai lépések</p>
+            <p class="text-xs font-medium text-[white]">Mai lépések</p>
           </div>
 
           <div class="grid grid-cols-3 gap-3 mb-4">
@@ -47,27 +58,25 @@
               class="text-center p-3 bg-[#76ABAE]/5 rounded-lg border border-[#76ABAE]/10"
             >
               <p class="text-xl font-bold text-[#76ABAE]">0</p>
-              <p class="text-xs text-[#31363F]/70 mt-1">Heti átlag</p>
+              <p class="text-xs text-[white] mt-1">Heti átlag</p>
             </div>
             <div
               class="text-center p-3 bg-[#76ABAE]/5 rounded-lg border border-[#76ABAE]/10"
             >
               <p class="text-xl font-bold text-[#76ABAE]">0</p>
-              <p class="text-xs text-[#31363F]/70 mt-1">Havi összeg</p>
+              <p class="text-xs text-[white] mt-1">Havi összeg</p>
             </div>
             <div
               class="text-center p-3 bg-[#76ABAE]/5 rounded-lg border border-[#76ABAE]/10"
             >
               <p class="text-xl font-bold text-[#76ABAE]">10000</p>
-              <p class="text-xs text-[#31363F]/70 mt-1">Napi cél</p>
+              <p class="text-xs text-[white] mt-1">Napi cél</p>
             </div>
           </div>
 
           <div class="bg-[#76ABAE]/5 rounded-lg p-3 border border-[#76ABAE]/10">
             <div class="flex justify-between items-center mb-2">
-              <span class="text-xs font-medium text-[#222831]"
-                >Napi haladás</span
-              >
+              <span class="text-xs font-medium text-[white]">Napi haladás</span>
               <span class="text-xs font-semibold text-[#76ABAE]">0%</span>
             </div>
             <div class="w-full bg-gray-200 rounded-full h-2">
@@ -79,11 +88,11 @@
           </div>
         </div>
 
-        <form action="/stepcounter/add" method="POST" class="space-y-3">
+        <form class="space-y-3">
           <div>
             <label
               for="steps"
-              class="block text-xs font-semibold text-[#222831] mb-1.5"
+              class="block text-xs font-semibold text-[white] mb-1.5"
             >
               Lépések hozzáadása
             </label>
@@ -101,7 +110,7 @@
           <div>
             <label
               for="date"
-              class="block text-xs font-semibold text-[#222831] mb-1.5"
+              class="block text-xs font-semibold text-[white] mb-1.5"
             >
               Dátum
             </label>
@@ -129,7 +138,8 @@
           <% } %>
 
           <button
-            type="submit"
+            type="button"
+            onclick="handleNewSteps('<%= useremail %>')"
             class="w-full bg-[#76ABAE] hover:bg-[#76ABAE]/90 text-white text-sm font-bold py-2.5 rounded-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#76ABAE]/50 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
           >
             Lépések rögzítése
@@ -138,12 +148,12 @@
       </div>
 
       <div
-        class="bg-white/90 h-82 backdrop-blur-md rounded-xl shadow-xl p-4 sm:p-6 border border-[#76ABAE]/20"
+        class="bg-[#222831]/60 h-82 backdrop-blur-md rounded-xl shadow-xl p-4 sm:p-6 border border-[#76ABAE]/20"
       >
-        <h3 class="text-xl sm:text-2xl font-bold mb-1 text-[#222831]">
+        <h3 class="text-xl sm:text-2xl font-bold mb-1 text-[white]">
           Napi cél beállítása
         </h3>
-        <p class="text-xs text-[#31363F]/70 mb-4">
+        <p class="text-xs text-[white] mb-4">
           Állítsd be az elérendő napi lépésszámod
         </p>
 
@@ -151,7 +161,7 @@
           <div>
             <label
               for="dailyGoal"
-              class="block text-xs font-semibold text-[#222831] mb-1.5"
+              class="block text-xs font-semibold text-[white] mb-1.5"
             >
               Napi lépéscél
             </label>
@@ -176,14 +186,104 @@
       </div>
     </div>
 
-    <div class="flex justify-end">
-      <div class="w-full lg:w-auto lg:max-w-lg -mt-60">
+    <div class="hidden lg:flex justify-end">
+      <div class="w-full lg:w-auto lg:max-w-lg -mt-80">
         <img
           src="../../src/images/lepesCounter2.png"
-          class="w-full h-auto drop-shadow-2xl scale-150 lg:scale-[1.3]"
+          class="w-full h-auto drop-shadow-2xl ]"
           alt="Motivációs kép"
         />
       </div>
     </div>
   </div>
 </section>
+<%- include('previousSteps') %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const dateInput = document.querySelector("#date");
+    if (dateInput) {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
+      const todayString = `${year}-${month}-${day}`;
+
+      dateInput.value = todayString;
+      dateInput.setAttribute("max", todayString);
+    }
+  });
+
+  function handleNewSteps(userEmail) {
+    const stepsInput = document.querySelector("#steps");
+    const dateInput = document.querySelector("#date");
+    const button = event.target;
+
+    if (!stepsInput || !dateInput) {
+      alert("Hiba: Nem találhatók a szükséges mezők!");
+      return;
+    }
+
+    const stepsToAdd = stepsInput.value.trim();
+    const dateToAdd = dateInput.value;
+
+    if (!stepsToAdd || stepsToAdd === "" || parseInt(stepsToAdd) <= 0) {
+      alert("Kérlek adj meg egy érvényes lépésszámot!");
+      stepsInput.focus();
+      return;
+    }
+
+    if (!dateToAdd || dateToAdd === "") {
+      alert("Kérlek válassz egy dátumot!");
+      dateInput.focus();
+      return;
+    }
+
+    const selectedDate = new Date(dateToAdd);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      alert("Nem adhatsz hozzá lépéseket múltbeli dátumhoz!");
+      dateInput.focus();
+      return;
+    }
+
+    const originalButtonText = button.textContent;
+    button.disabled = true;
+    button.textContent = "Feldolgozás...";
+    button.classList.add("opacity-75", "cursor-not-allowed");
+
+    fetch("/stepcounter/view/new", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        email: userEmail,
+        steps: stepsToAdd,
+        date: dateToAdd,
+      }),
+    })
+      .then((response) => {
+        if (response.redirected) {
+          window.location.href = response.url;
+        } else {
+          return response.text();
+        }
+      })
+      .then((data) => {
+        if (data) {
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.error("Hiba:", error);
+        alert("Hiba történt a lépések rögzítése során. Kérlek próbáld újra!");
+        button.disabled = false;
+        button.textContent = originalButtonText;
+        button.classList.remove("opacity-75", "cursor-not-allowed");
+      });
+  }
+</script>

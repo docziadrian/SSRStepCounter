@@ -6,22 +6,30 @@
   <link rel="stylesheet" href="../../src/css/output.css" />
 </head>
 <section
-  class="relative w-full min-h-screen flex items-center justify-center overflow-hidden -mt-32"
+  class="relative w-full min-h-screen lg:min-h-[calc(71vh*1.3)] xl:min-h-[calc(81vh*1.3)] flex items-center justify-center overflow-hidden -top-32"
 >
   <!-- BG image -->
   <div class="absolute inset-0 z-0">
     <img
       src="../src/images/hatter.png"
       alt="Background"
-      class="w-full h-full max-w-screen-2xl object-cover"
+      class="w-full h-full xl:max-w-[70%] object-cover"
+    />
+    <div class="absolute inset-0 hero-gradient bg-pattern"></div>
+  </div>
+
+  <!-- Mobile BG image -->
+  <div class="absolute inset-0 z-0 xl:hidden">
+    <img
+      src="../src/images/hattermobile.png"
+      alt="Background"
+      class="w-full h-full xl:max-w-[70%] object-cover"
     />
     <div class="absolute inset-0 hero-gradient bg-pattern"></div>
   </div>
 
   <!-- container-->
-  <div
-    class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16 2xl:mt-12"
-  >
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
       <!-- Left szoveg dobozok -->
       <div class="text-white fade-in order-2 lg:order-1">
