@@ -30,9 +30,9 @@ router.get("/view", (req, res) => {
       products = [];
     }
 
-    const processedProducts = products.map(product => {
+    const processedProducts = products.map((product) => {
       let imageurls = product.imageurls;
-      if (typeof imageurls === 'string') {
+      if (typeof imageurls === "string") {
         try {
           imageurls = JSON.parse(imageurls);
         } catch (e) {
@@ -41,13 +41,19 @@ router.get("/view", (req, res) => {
       }
       return {
         ...product,
-        imageurls: imageurls || []
+        imageurls: imageurls || [],
       };
     });
 
-    const minPrice = processedProducts.length > 0 ? Math.min(...processedProducts.map(p => p.price)) : 0;
-    const maxPrice = processedProducts.length > 0 ? Math.max(...processedProducts.map(p => p.price)) : 100000;
-    const categories = [...new Set(processedProducts.map(p => p.category))];
+    const minPrice =
+      processedProducts.length > 0
+        ? Math.min(...processedProducts.map((p) => p.price))
+        : 0;
+    const maxPrice =
+      processedProducts.length > 0
+        ? Math.max(...processedProducts.map((p) => p.price))
+        : 100000;
+    const categories = [...new Set(processedProducts.map((p) => p.category))];
 
     ejs.renderFile(
       "views/products/products.ejs",
@@ -55,6 +61,7 @@ router.get("/view", (req, res) => {
         error: req.session.message || null,
         user: req.session.username || null,
         useremail: req.session.useremail || null,
+        cartCounter: 5,
         products: processedProducts || [],
         minPrice: minPrice,
         maxPrice: maxPrice,

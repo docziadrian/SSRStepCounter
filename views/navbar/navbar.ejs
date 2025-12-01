@@ -177,8 +177,8 @@
         <div class="hidden lg:flex items-center gap-2 shrink-0">
           <% if (typeof navbarItemsRight !== 'undefined' &&
           navbarItemsRight.length > 0) { %> <%
-          navbarItemsRight.forEach(function(item) { %>
-          <% if (item.type === 'cart') { %>
+          navbarItemsRight.forEach(function(item) { %> <% if (item.type ===
+          'cart') { %>
           <a
             href="<%= item.link %>"
             class="relative flex items-center justify-center w-11 h-11 rounded-xl backdrop-blur-xl bg-white/10 border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300 shadow-lg shadow-black/10 group"
@@ -212,8 +212,7 @@
               ><%= item.name %></span
             >
           </a>
-          <% } %>
-          <% }); %> <% } %>
+          <% } %> <% }); %> <% } %>
         </div>
 
         <button
@@ -330,8 +329,8 @@
           <% if (typeof navbarItemsRight !== 'undefined' &&
           navbarItemsRight.length > 0) { %>
           <div class="mobile-cta grid gap-2 mt-4 pt-4 border-t border-white/10">
-            <% navbarItemsRight.forEach(function(item) { %>
-            <% if (item.type === 'cart') { %>
+            <% navbarItemsRight.forEach(function(item) { %> <% if (item.type ===
+            'cart') { %>
             <a
               href="<%= item.link %>"
               class="group flex items-center justify-center gap-3 p-4 rounded-2xl backdrop-blur-xl bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 shadow-lg"
@@ -356,7 +355,8 @@
                   >0</span
                 >
               </div>
-              <span class="text-[#EEEEEE] font-bold text-base group-hover:text-white"
+              <span
+                class="text-[#EEEEEE] font-bold text-base group-hover:text-white"
                 ><%= item.name %></span
               >
             </a>
@@ -382,8 +382,7 @@
                 ><%= item.name %></span
               >
             </a>
-            <% } %>
-            <% }); %>
+            <% } %> <% }); %>
           </div>
           <% } %>
         </div>
@@ -425,5 +424,27 @@
       navInner.style.boxShadow = "0 8px 32px rgba(0,0,0,0.3)";
       navInner.style.borderColor = "rgba(255,255,255,0.2)";
     }
+  });
+
+  // Function to update cart counters
+  function updateCartCounters() {
+    //localstorage
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const count = cart.reduce((total, item) => total + item.quantity, 0);
+
+    const cartCounter = document.getElementById("cartCounter");
+    const cartCounterMobile = document.getElementById("cartCounterMobile");
+
+    if (cartCounter) {
+      cartCounter.textContent = count;
+    }
+    if (cartCounterMobile) {
+      cartCounterMobile.textContent = count;
+    }
+  }
+
+  window.addEventListener("load", function () {
+    // Fetch cart item count from server or session
+    updateCartCounters();
   });
 </script>

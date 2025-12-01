@@ -35,6 +35,9 @@ app.use("/plans", workoutPlans);
 const products = require("./modules/products");
 app.use("/products", products);
 
+const cart = require("./modules/cart");
+app.use("/cart", cart);
+
 // Listening...
 app.listen(port, () => {
   console.log(`A szerver ezen a porton fut: ${port}`);

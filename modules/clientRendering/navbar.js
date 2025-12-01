@@ -6,7 +6,7 @@ const guestNavbarItemsRight = [
 const guestNavbarItemsLeft = [];
 
 const userNavbarItemsRight = [
-  { name: "Kosár", link: "/cart", type: "cart" },
+  { name: "Kosár", link: "/cart/view", type: "cart" },
   { name: "Profil", link: "/users/profile" },
   { name: "Kijelentkezés", link: "/users/logout" },
 ];
