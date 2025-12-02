@@ -39,7 +39,9 @@
       </p>
       <% if (typeof stepsdata !== 'undefined' && stepsdata && stepsdata.length >
       0) { %>
-      <p class="text-lg text-[#76abae] font-semibold mt-4">
+      <p
+        class="text-lg text-[#ffffff] font-semibold mt-4 bg-black p-2 max-w-lg mx-auto"
+      >
         Összesen: <%= stepsdata.reduce((sum, s) => sum + s.steps,
         0).toLocaleString('hu-HU') %> lépés
       </p>
@@ -84,29 +86,74 @@
         <p class="text-[#EEEEEE] text-sm mb-4">
           <% const date = new Date(step.date); const formattedDate =
           date.toLocaleDateString('hu-HU', { year: 'numeric', month: 'long',
-          day: 'numeric' }); %> <%= formattedDate %>
+          day: 'numeric' }); const dateISO = date.toISOString().split('T')[0];
+          %> <%= formattedDate %>
         </p>
 
         <!-- Status badge -->
-        <% if (step.steps >= 10000) { %>
-        <span
-          class="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-semibold rounded-full border border-green-500/30"
-        >
-          Cél elérve!
-        </span>
-        <% } else if (step.steps >= 5000) { %>
-        <span
-          class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs font-semibold rounded-full border border-yellow-500/30"
-        >
-          Jó úton!
-        </span>
-        <% } else { %>
-        <span
-          class="px-3 py-1 bg-[#76abae]/20 text-[#76abae] text-xs font-semibold rounded-full border border-[#76abae]/30"
-        >
-          Folytasd!
-        </span>
-        <% } %>
+        <div class="mb-4">
+          <% if (step.steps >= 10000) { %>
+          <span
+            class="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-semibold rounded-full border border-green-500/30"
+          >
+            Cél elérve!
+          </span>
+          <% } else if (step.steps >= 5000) { %>
+          <span
+            class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs font-semibold rounded-full border border-yellow-500/30"
+          >
+            Jó úton!
+          </span>
+          <% } else { %>
+          <span
+            class="px-3 py-1 bg-[#76abae]/20 text-[#76abae] text-xs font-semibold rounded-full border border-[#76abae]/30"
+          >
+            Folytasd!
+          </span>
+          <% } %>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="flex gap-2 mt-4">
+          <button
+            onclick="openEditModal('<%= useremail %>', '<%= dateISO %>', <%= step.steps %>, '<%= formattedDate %>')"
+            class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-1"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              ></path>
+            </svg>
+            Szerkeszt
+          </button>
+          <button
+            onclick="openDeleteModal('<%= useremail %>', '<%= dateISO %>', '<%= formattedDate %>')"
+            class="flex-1 bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-1"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              ></path>
+            </svg>
+            Törlés
+          </button>
+        </div>
       </div>
       <% }); %> <% } else { %>
       <!-- Empty state -->
@@ -143,3 +190,249 @@
     </div>
   </div>
 </section>
+
+<!-- Edit Modal -->
+<div
+  id="editModal"
+  class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4"
+>
+  <div
+    class="bg-[#222831] rounded-2xl shadow-2xl border border-[#76abae]/30 max-w-md w-full transform transition-all"
+  >
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-2xl font-bold text-white">Lépések szerkesztése</h3>
+        <button
+          onclick="closeEditModal()"
+          class="text-[#EEEEEE]/60 hover:text-white transition-colors"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <form
+        id="editForm"
+        action="/stepcounter/view/edit"
+        method="POST"
+        class="space-y-4"
+      >
+        <input type="hidden" name="email" id="editEmail" />
+        <input type="hidden" name="originalDate" id="editOriginalDate" />
+
+        <div>
+          <label class="block text-[#EEEEEE] text-sm font-semibold mb-2"
+            >Dátum</label
+          >
+          <p
+            id="editDateDisplay"
+            class="text-[#76abae] text-lg font-medium mb-2"
+          ></p>
+          <input
+            type="date"
+            name="date"
+            id="editDate"
+            required
+            class="w-full px-4 py-2.5 bg-[#31363F] border-2 border-[#76abae]/30 rounded-lg text-white focus:outline-none focus:border-[#76abae] transition-colors"
+          />
+        </div>
+
+        <div>
+          <label
+            for="editSteps"
+            class="block text-[#EEEEEE] text-sm font-semibold mb-2"
+            >Lépésszám</label
+          >
+          <input
+            type="number"
+            name="steps"
+            id="editSteps"
+            min="1"
+            required
+            class="w-full px-4 py-2.5 bg-[#31363F] border-2 border-[#76abae]/30 rounded-lg text-white focus:outline-none focus:border-[#76abae] transition-colors"
+            placeholder="Például: 8500"
+          />
+        </div>
+
+        <div class="flex gap-3 mt-6">
+          <button
+            type="button"
+            onclick="closeEditModal()"
+            class="flex-1 px-4 py-2.5 bg-[#31363F] hover:bg-[#31363F]/80 text-white rounded-lg font-semibold transition-all"
+          >
+            Mégse
+          </button>
+          <button
+            type="submit"
+            class="flex-1 px-4 py-2.5 bg-[#76abae] hover:bg-[#76abae]/90 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+          >
+            Mentés
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div
+  id="deleteModal"
+  class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4"
+>
+  <div
+    class="bg-[#222831] rounded-2xl shadow-2xl border border-red-500/30 max-w-md w-full transform transition-all"
+  >
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-2xl font-bold text-white">Törlés megerősítése</h3>
+        <button
+          onclick="closeDeleteModal()"
+          class="text-[#EEEEEE]/60 hover:text-white transition-colors"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="mb-6">
+        <div
+          class="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4"
+        >
+          <svg
+            class="w-8 h-8 text-red-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            ></path>
+          </svg>
+        </div>
+        <p class="text-[#EEEEEE] text-center mb-2">
+          Biztosan törölni szeretnéd a(z)
+        </p>
+        <p
+          id="deleteDate"
+          class="text-[#76abae] text-lg font-bold text-center mb-2"
+        ></p>
+        <p class="text-[#EEEEEE] text-center">dátumhoz tartozó bejegyzést?</p>
+        <p class="text-[#EEEEEE]/60 text-sm text-center mt-2">
+          Ez a művelet nem vonható vissza.
+        </p>
+      </div>
+
+      <form
+        id="deleteForm"
+        action="/stepcounter/view/delete"
+        method="POST"
+        class="space-y-4"
+      >
+        <input type="hidden" name="email" id="deleteEmail" />
+        <input type="hidden" name="date" id="deleteOriginalDate" />
+
+        <div class="flex gap-3">
+          <button
+            type="button"
+            onclick="closeDeleteModal()"
+            class="flex-1 px-4 py-2.5 bg-[#31363F] hover:bg-[#31363F]/80 text-white rounded-lg font-semibold transition-all"
+          >
+            Mégse
+          </button>
+          <button
+            type="submit"
+            class="flex-1 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+          >
+            Törlés
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Edit Modal Functions
+  function openEditModal(email, date, steps, formattedDate) {
+    document.getElementById("editEmail").value = email;
+    document.getElementById("editOriginalDate").value = date;
+    document.getElementById("editDate").value = date;
+    document.getElementById("editSteps").value = steps;
+    document.getElementById("editDateDisplay").textContent = formattedDate;
+
+    const modal = document.getElementById("editModal");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeEditModal() {
+    const modal = document.getElementById("editModal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    document.body.style.overflow = "";
+  }
+
+  // Delete Modal Functions
+  function openDeleteModal(email, date, formattedDate) {
+    document.getElementById("deleteEmail").value = email;
+    document.getElementById("deleteOriginalDate").value = date;
+    document.getElementById("deleteDate").textContent = formattedDate;
+
+    const modal = document.getElementById("deleteModal");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeDeleteModal() {
+    const modal = document.getElementById("deleteModal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    document.body.style.overflow = "";
+  }
+
+  // Close modal on ESC key
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closeEditModal();
+      closeDeleteModal();
+    }
+  });
+
+  // Close modal on backdrop click
+  document.getElementById("editModal").addEventListener("click", function (e) {
+    if (e.target === this) closeEditModal();
+  });
+
+  document
+    .getElementById("deleteModal")
+    .addEventListener("click", function (e) {
+      if (e.target === this) closeDeleteModal();
+    });
+</script>

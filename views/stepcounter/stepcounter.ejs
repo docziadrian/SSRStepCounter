@@ -48,7 +48,9 @@
             <div
               class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-[#76ABAE] to-[#76ABAE]/70 shadow-lg mb-3"
             >
-              <span class="text-3xl font-bold text-white">0</span>
+              <span class="text-3xl font-bold text-white"
+                ><%= dailySteps.toLocaleString('hu-HU') %></span
+              >
             </div>
             <p class="text-xs font-medium text-[white]">Mai lépések</p>
           </div>
@@ -57,19 +59,25 @@
             <div
               class="text-center p-3 bg-[#76ABAE]/5 rounded-lg border border-[#76ABAE]/10"
             >
-              <p class="text-xl font-bold text-[#76ABAE]">0</p>
+              <p class="text-xl font-bold text-[#76ABAE]">
+                <%= weeklyAverage.toLocaleString('hu-HU') %>
+              </p>
               <p class="text-xs text-[white] mt-1">Heti átlag</p>
             </div>
             <div
               class="text-center p-3 bg-[#76ABAE]/5 rounded-lg border border-[#76ABAE]/10"
             >
-              <p class="text-xl font-bold text-[#76ABAE]">0</p>
+              <p class="text-xl font-bold text-[#76ABAE]">
+                <%= monthlyTotal.toLocaleString('hu-HU') %>
+              </p>
               <p class="text-xs text-[white] mt-1">Havi összeg</p>
             </div>
             <div
               class="text-center p-3 bg-[#76ABAE]/5 rounded-lg border border-[#76ABAE]/10"
             >
-              <p class="text-xl font-bold text-[#76ABAE]">10000</p>
+              <p class="text-xl font-bold text-[#76ABAE]">
+                <%= dailyGoal.toLocaleString('hu-HU') %>
+              </p>
               <p class="text-xs text-[white] mt-1">Napi cél</p>
             </div>
           </div>
@@ -77,12 +85,14 @@
           <div class="bg-[#76ABAE]/5 rounded-lg p-3 border border-[#76ABAE]/10">
             <div class="flex justify-between items-center mb-2">
               <span class="text-xs font-medium text-[white]">Napi haladás</span>
-              <span class="text-xs font-semibold text-[#76ABAE]">0%</span>
+              <span class="text-xs font-semibold text-[#76ABAE]"
+                ><%= dailyProgress %>%</span
+              >
             </div>
             <div class="w-full bg-gray-200 rounded-full h-2">
               <div
                 class="bg-gradient-to-r from-[#76ABAE] to-[#76ABAE]/70 h-2 rounded-full transition-all duration-500"
-                style="width: 0%"
+                style="width: <%= dailyProgress %>%"
               ></div>
             </div>
           </div>
@@ -171,7 +181,7 @@
               name="dailyGoal"
               min="1000"
               step="1000"
-              value="10000"
+              placeholder="írj be új napi célt (lépésekben)"
               required
               class="w-full px-3 py-2.5 text-sm bg-white border-2 border-[#76ABAE]/30 rounded-lg text-[#222831] focus:outline-none focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent transition-all"
             />
@@ -197,7 +207,8 @@
     </div>
   </div>
 </section>
-<%- include('previousSteps') %>
+
+<%- include('previousSteps') %> <%- include('../footer/footer') %>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
@@ -213,6 +224,83 @@
       dateInput.setAttribute("max", todayString);
     }
   });
+
+  function handleDeleteSteps(userEmail, date) {
+    if (
+      !confirm(
+        `Biztosan törölni szeretnéd a ${date} dátumhoz tartozó bejegyzést?`
+      )
+    ) {
+      return;
+    }
+
+    fetch("/stepcounter/view/delete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        email: userEmail,
+        date: date,
+      }),
+    })
+      .then((response) => {
+        if (response.redirected) {
+          window.location.href = response.url;
+        } else {
+          return response.text();
+        }
+      })
+      .then((data) => {
+        if (data) {
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.error("Hiba:", error);
+        alert("Hiba történt a törlés során. Kérlek próbáld újra!");
+      });
+  }
+
+  function handleEditSteps(userEmail, date, currentSteps) {
+    const newSteps = prompt(`Lépések szerkesztése (${date}):`, currentSteps);
+
+    if (newSteps === null) return; // Mégsem
+
+    if (!newSteps || newSteps === "" || parseInt(newSteps) <= 0) {
+      alert("Kérlek adj meg egy érvényes lépésszámot!");
+      return;
+    }
+
+    fetch("/stepcounter/view/edit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        email: userEmail,
+        steps: newSteps,
+        date: date,
+        originalDate: date,
+      }),
+    })
+      .then((response) => {
+        if (response.redirected) {
+          window.location.href = response.url;
+        } else {
+          return response.text();
+        }
+      })
+      .then((data) => {
+        if (data) {
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.error("Hiba:", error);
+        alert("Hiba történt a szerkesztés során. Kérlek próbáld újra!");
+      });
+  }
 
   function handleNewSteps(userEmail) {
     const stepsInput = document.querySelector("#steps");
@@ -243,12 +331,6 @@
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     selectedDate.setHours(0, 0, 0, 0);
-
-    if (selectedDate < today) {
-      alert("Nem adhatsz hozzá lépéseket múltbeli dátumhoz!");
-      dateInput.focus();
-      return;
-    }
 
     const originalButtonText = button.textContent;
     button.disabled = true;
